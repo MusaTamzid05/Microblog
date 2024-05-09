@@ -1,9 +1,10 @@
 package main
 
 import (
-    "fmt"
     "microblog/database"
     "microblog/users"
+    "github.com/gin-gonic/gin"
+
 )
 
 func init() {
@@ -13,6 +14,12 @@ func init() {
 
 
 func main() {
-    users.Migrate()
-    fmt.Println("Entry point!!")
+    userHandler := users.MakeUserHandle()
+
+    router := gin.Default()
+    router.POST("/users/signup", userHandler.SignUpHandler)
+
+    router.Run()
+
+
 }

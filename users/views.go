@@ -29,6 +29,18 @@ func (u *UserHandler) SignUpHandler(c *gin.Context) {
         return
     }
 
+    if u.model.NameExists()  {
+        c.JSON(
+            http.StatusBadRequest, gin.H {
+                "status" : "failed",
+                "message" : "user with the same name exists!!",
+            },
+        )
+
+
+        return
+    }
+
     err = u.model.Save()
 
     if err != nil {

@@ -32,3 +32,12 @@ func (u *UserModel) Save() error  {
     return nil
 
 }
+
+func (u UserModel) GetAll() []UserModel {
+    userModels := []UserModel{}
+    database.RootDatabase.DB.Find(&userModels)
+
+    return userModels
+
+
+}

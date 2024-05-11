@@ -16,14 +16,15 @@ func init() {
 
 func main() {
     userHandler := users.MakeUserHandle()
-    postModel := posts.MakePostModel()
-    postModel.Migrate()
+    postHandler := posts.MakePostHandler()
 
     router := gin.Default()
     router.POST("/users/signup", userHandler.SignUpHandler)
     router.POST("/users/login", userHandler.LoginHandler)
     router.GET("/users/", userHandler.GetUsersHandler)
 
+
+    router.POST("/posts/create", postHandler.CreatePostHandler)
     router.Run()
 
 

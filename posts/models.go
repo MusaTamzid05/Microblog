@@ -27,3 +27,16 @@ func (p *PostModel) Migrate() {
     fmt.Println("post migrate")
 
 }
+
+
+func (p *PostModel) Save() error  {
+    result := database.RootDatabase.DB.Create(p)
+
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
+
+}
+

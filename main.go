@@ -25,6 +25,8 @@ func main() {
 
 
     router.POST("/posts/create", postHandler.CreatePostHandler)
+    router.GET("/posts/", postHandler.GetPostsHandler)
+
     router.Run()
 
 

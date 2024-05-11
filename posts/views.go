@@ -73,3 +73,17 @@ func (p *PostHandler) CreatePostHandler(c *gin.Context) {
     )
 
 }
+
+
+func (p *PostHandler) GetPostsHandler(c *gin.Context) {
+    posts := p.model.GetAll()
+
+    c.JSON(
+        http.StatusOK, gin.H {
+            "posts" : posts,
+            
+        },
+    )
+
+
+}

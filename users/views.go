@@ -77,3 +77,37 @@ func (u *UserHandler) GetUsersHandler(c *gin.Context) {
 
 
 
+func (u *UserHandler) LoginHandler(c *gin.Context) {
+    err := c.BindJSON(&u.model)
+    
+    if err != nil {
+        c.JSON(
+            http.StatusBadRequest, gin.H {
+                "status" : "failed",
+                "message" : err.Error(),
+            },
+        )
+
+        return
+    }
+
+    if u.model.Exists()  {
+        c.JSON(
+            http.StatusOK, gin.H {
+                "status" : "success",
+            },
+        )
+
+
+        return
+    }
+
+
+    c.JSON(
+        http.StatusBadRequest, gin.H {
+            "status" : "failed",
+        },
+    )
+
+
+}

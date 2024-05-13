@@ -7,16 +7,16 @@ import (
 
 
 type UserHandler struct {
-    model UserModel
 }
 
 func MakeUserHandle() UserHandler {
-    return UserHandler{model: UserModel{}}
+    return UserHandler{}
 }
 
 
 func (u *UserHandler) SignUpHandler(c *gin.Context) {
-    err := c.BindJSON(&u.model)
+    var user UserModel
+    err := c.BindJSON(&user)
     
     if err != nil {
         c.JSON(
@@ -29,7 +29,7 @@ func (u *UserHandler) SignUpHandler(c *gin.Context) {
         return
     }
 
-    if u.model.NameExists()  {
+    if user.NameExists()  {
         c.JSON(
             http.StatusBadRequest, gin.H {
                 "status" : "failed",
@@ -41,7 +41,7 @@ func (u *UserHandler) SignUpHandler(c *gin.Context) {
         return
     }
 
-    err = u.model.Save()
+    err = user.Save()
 
     if err != nil {
         c.JSON(
@@ -67,9 +67,10 @@ func (u *UserHandler) SignUpHandler(c *gin.Context) {
 
 
 func (u *UserHandler) GetUsersHandler(c *gin.Context) {
+    var user UserModel
     c.JSON(
         http.StatusOK, gin.H {
-            "users" : u.model.GetAll(),
+            "users" : user.GetAll(),
         },
     )
 
@@ -78,7 +79,8 @@ func (u *UserHandler) GetUsersHandler(c *gin.Context) {
 
 
 func (u *UserHandler) LoginHandler(c *gin.Context) {
-    err := c.BindJSON(&u.model)
+    var user UserModel
+    err := c.BindJSON(&user)
     
     if err != nil {
         c.JSON(
@@ -91,7 +93,7 @@ func (u *UserHandler) LoginHandler(c *gin.Context) {
         return
     }
 
-    if u.model.Exists()  {
+    if user.Exists()  {
         c.JSON(
             http.StatusOK, gin.H {
                 "status" : "success",

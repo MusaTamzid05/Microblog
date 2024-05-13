@@ -26,6 +26,7 @@ func main() {
 
     router.POST("/posts/create", postHandler.CreatePostHandler)
     router.GET("/posts/", postHandler.GetPostsHandler)
+    router.POST("/posts/update_like_request", postHandler.LikeUpdateHandler)
 
     router.Run()
 

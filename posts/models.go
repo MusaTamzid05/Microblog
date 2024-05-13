@@ -29,7 +29,7 @@ func (p *PostModel) Migrate() {
 }
 
 
-func (p *PostModel) Save() error  {
+func (p *PostModel) Create() error  {
     result := database.RootDatabase.DB.Create(p)
 
     if result.Error != nil {
@@ -41,6 +41,20 @@ func (p *PostModel) Save() error  {
 }
 
 
+func (p *PostModel) Update() error  {
+    result := database.RootDatabase.DB.Save(p)
+
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
+
+}
+
+
+
+
 
 func (p *PostModel) GetAll() []PostModel {
     posts := []PostModel{}
@@ -50,3 +64,23 @@ func (p *PostModel) GetAll() []PostModel {
 
 }
 
+
+func (p PostModel) FindByID(id int) (PostModel, bool) {
+    var postModel PostModel
+    result := database.RootDatabase.DB.First(&postModel, id)
+
+    if result.Error != nil {
+        if result.Error == gorm.ErrRecordNotFound {
+            return postModel, false 
+
+        }
+
+        // @TODO: Do not panic here !, send the error message
+        panic(result.Error.Error())
+    }
+
+
+    return postModel, true
+
+
+}

@@ -105,3 +105,41 @@ func (c *CommentModel) Migrate() {
     fmt.Println("comment migrate")
 
 }
+
+
+func (c *CommentModel) Create() error  {
+    result := database.RootDatabase.DB.Create(c)
+
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
+
+}
+
+
+func (c *CommentModel) Update() error  {
+    result := database.RootDatabase.DB.Save(c)
+
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
+
+}
+
+
+
+
+
+func (c *CommentModel) GetAll() []CommentModel {
+    comments := []CommentModel{}
+    database.RootDatabase.DB.Find(&comments)
+
+    return comments
+
+}
+
+

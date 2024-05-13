@@ -18,6 +18,9 @@ func main() {
     userHandler := users.MakeUserHandle()
     postHandler := posts.MakePostHandler()
 
+    commentModel :=  posts.MakeCommentModel()
+    commentModel.Migrate()
+
     router := gin.Default()
     router.POST("/users/signup", userHandler.SignUpHandler)
     router.POST("/users/login", userHandler.LoginHandler)

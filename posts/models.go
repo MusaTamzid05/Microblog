@@ -84,3 +84,24 @@ func (p PostModel) FindByID(id int) (PostModel, bool) {
 
 
 }
+
+
+type CommentModel struct {
+    gorm.Model
+
+    Text string  `json:"text"`
+    Like int `json:"like"`
+    Dislike int `json:"dislike"`
+
+    CommentID int `json:"comment"`
+}
+
+func MakeCommentModel() CommentModel {
+    return CommentModel{}
+}
+
+func (c *CommentModel) Migrate() {
+    database.RootDatabase.DB.AutoMigrate(&CommentModel{})
+    fmt.Println("comment migrate")
+
+}

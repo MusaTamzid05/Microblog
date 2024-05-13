@@ -10,7 +10,6 @@ import (
 
 
 type PostHandler struct {
-    model PostModel
 }
 
 type PostLikeRequest struct {
@@ -24,7 +23,8 @@ func MakePostHandler() PostHandler {
 }
 
 func (p *PostHandler) CreatePostHandler(c *gin.Context) {
-    err := c.BindJSON(&p.model)
+    var post PostModel
+    err := c.BindJSON(&post)
     
     if err != nil {
         c.JSON(
@@ -38,7 +38,7 @@ func (p *PostHandler) CreatePostHandler(c *gin.Context) {
     }
 
 
-    userId := p.model.UserId
+    userId := post.UserId
     var userModel users.UserModel
 
     _ , found := userModel.FindByID(userId)
@@ -57,7 +57,7 @@ func (p *PostHandler) CreatePostHandler(c *gin.Context) {
     }
 
 
-    err = p.model.Create()
+    err = post.Create()
 
     if err != nil {
         c.JSON(
@@ -82,7 +82,8 @@ func (p *PostHandler) CreatePostHandler(c *gin.Context) {
 
 
 func (p *PostHandler) GetPostsHandler(c *gin.Context) {
-    posts := p.model.GetAll()
+    var post PostModel
+    posts := post.GetAll()
 
     c.JSON(
         http.StatusOK, gin.H {
@@ -162,3 +163,83 @@ func (p *PostHandler) LikeUpdateHandler(c *gin.Context)  {
     )
 
 }
+
+
+type CommentHandler struct {
+}
+
+
+func MakeCommentHandler() CommentHandler {
+    return CommentHandler{}
+}
+
+func (co *CommentHandler) CreateCommentHandler(c *gin.Context) {
+    var comment CommentModel
+    err := c.BindJSON(&comment)
+    
+    if err != nil {
+        c.JSON(
+            http.StatusBadRequest, gin.H {
+                "status" : "failed",
+                "message" : err.Error(),
+            },
+        )
+
+        return
+    }
+
+    post := MakePostModel()
+
+    _, postFound := post.FindByID(comment.PostID)
+
+    if !postFound {
+        c.JSON(
+            http.StatusNotFound, gin.H {
+                "status" : "failed",
+                "message" : "comment parent post not found",
+            },
+        )
+
+        return
+
+    }
+
+    err = comment.Create()
+
+    if err != nil {
+        c.JSON(
+            http.StatusBadRequest, gin.H {
+                "status" : "failed",
+                "message" : err.Error(),
+            },
+        )
+
+        return
+
+
+    }
+
+    c.JSON(
+        http.StatusCreated, gin.H {
+            "status" : "success",
+        },
+    )
+
+}
+
+
+func (co *CommentHandler) GetCommentsHandler(c *gin.Context) {
+    var comment CommentModel
+    comments := comment.GetAll()
+
+    c.JSON(
+        http.StatusOK, gin.H {
+            "comments" : comments,
+            
+        },
+    )
+}
+
+
+
+

@@ -93,7 +93,7 @@ type CommentModel struct {
     Like int `json:"like"`
     Dislike int `json:"dislike"`
 
-    CommentID int `json:"comment"`
+    PostID int `json:"post"`
 }
 
 func MakeCommentModel() CommentModel {
@@ -108,6 +108,7 @@ func (c *CommentModel) Migrate() {
 
 
 func (c *CommentModel) Create() error  {
+    fmt.Println("Comment ID ", c.ID)
     result := database.RootDatabase.DB.Create(c)
 
     if result.Error != nil {
@@ -129,9 +130,6 @@ func (c *CommentModel) Update() error  {
     return nil
 
 }
-
-
-
 
 
 func (c *CommentModel) GetAll() []CommentModel {

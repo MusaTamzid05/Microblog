@@ -17,9 +17,8 @@ func init() {
 func main() {
     userHandler := users.MakeUserHandle()
     postHandler := posts.MakePostHandler()
+    commentHandler := posts.MakeCommentHandler()
 
-    commentModel :=  posts.MakeCommentModel()
-    commentModel.Migrate()
 
     router := gin.Default()
     router.POST("/users/signup", userHandler.SignUpHandler)
@@ -30,6 +29,10 @@ func main() {
     router.POST("/posts/create", postHandler.CreatePostHandler)
     router.GET("/posts/", postHandler.GetPostsHandler)
     router.POST("/posts/update_like_request", postHandler.LikeUpdateHandler)
+
+
+    router.POST("/comments/create", commentHandler.CreateCommentHandler)
+    router.GET("/comments/", commentHandler.GetCommentsHandler)
 
     router.Run()
 
